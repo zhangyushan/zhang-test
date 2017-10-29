@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="zhang.mapper.PersonMapper">
+	<!-- resultMap标签是把“字段名→属性名”映射单独拿出来配置 -->
+	<!-- id属性：用于在select标签中引用resultMap -->
+	<!-- type属性：最终查询结果封装的方式，相当于select标签中的resultType -->
+	<resultMap type="zhang.domain.Person" id="queryPersonResultMap">
+		<id column="id" property="id" />
+		<id column="name" property="name" />
+		<id column="age" property="age" />
+	</resultMap>
+
+	<!-- 插入语句 -->
+	<insert id="savePerson">
+		insert into person(name,age)values(#{name},#{age})
+	</insert>
+	
+	<!--修改语句  -->
+	<update id="updatePerson" parameterType="zhang.domain.Person">
+		update person
+			<set>
+				<if test="age != null">age=#{age},</if>
+				<if test="name != null">name=#{name},</if>
+			</set>
+		where id=#{id}
+	</update>
+	
+	<!-- 删除语句 -->
+	<delete id="deletePersonById">
+		delete from person where id = #{id}
+	</delete>
+	
+	<!-- 查询语句 -->
+	<select id="selectPersonById" resultMap="queryPersonResultMap">
+		select id,name,age from person where id = #{id}
+	</select>
+</mapper>
